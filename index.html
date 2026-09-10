@@ -2,198 +2,454 @@
 <html lang="ko">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>FormWheel — Wheel Battle</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>FormWheel Bomb</title>
 <style>
-:root{--bg:#f7f7fb;--card:#fff;--line:#e5e7eb;--text:#18181b;--muted:#71717a;--accent:#4f46e5;--soft:#eef0ff;--a:#ff6b6b;--b:#22b8cf;--c:#ffb020;--d:#7c5cfc}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui,-apple-system,sans-serif}
-button,input{font:inherit}.nav{height:60px;background:#fff;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 18px}
-.brand{border:0;background:none;font-weight:800;font-size:17px;cursor:pointer}.brand span{background:var(--accent);color:white;border-radius:8px;padding:7px;margin-right:7px}
-.tag{font-size:11px;color:var(--accent);background:var(--soft);padding:4px 8px;border-radius:999px;margin-left:6px}.wrap{width:min(720px,calc(100% - 30px));margin:30px auto 60px}
-.title{font-size:28px;margin:0 0 7px}.sub{color:var(--muted);margin:0 0 22px;line-height:1.55}.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px;margin-bottom:14px}
-.home{display:grid;grid-template-columns:1fr 1fr;gap:12px}.home button,.btn{border:0;border-radius:12px;padding:17px;font-weight:800;cursor:pointer}
-.home button{background:#fff;border:1.5px solid var(--line);text-align:left}.home button:hover{border-color:var(--accent);background:var(--soft)}
-label{display:block;color:var(--muted);font-size:13px;font-weight:700;margin-bottom:7px}
-input{width:100%;padding:13px;border:1.5px solid var(--line);border-radius:11px;outline:0;margin-bottom:14px}input:focus{border-color:var(--accent)}
-.btn{width:100%;background:var(--accent);color:#fff}.btn:disabled{opacity:.4;cursor:not-allowed}.err{color:#e11d48;font-size:13px;margin-top:9px}
-.pin{text-align:center;background:var(--soft);border:1.5px dashed var(--accent);border-radius:14px;padding:20px;margin-bottom:16px}
-.pin strong{display:block;font-size:42px;letter-spacing:7px;color:var(--accent)}.small{font-size:13px;color:var(--muted);line-height:1.5}
-.players{display:grid;grid-template-columns:1fr 1fr;gap:12px}.player{padding:16px;border:1.5px solid var(--line);border-radius:13px;text-align:center}.player.me{border-color:var(--accent)}
-.score{font-size:32px;font-weight:900;margin-top:5px}.status{text-align:center;color:var(--muted);padding:10px}
-.wheel-area{position:relative;width:min(390px,90vw);aspect-ratio:1;margin:5px auto 20px}
-.wheel{width:100%;height:100%;border-radius:50%;border:8px solid #fff;box-shadow:0 8px 30px #0001;position:relative;overflow:hidden;transition:transform 4s cubic-bezier(.15,.75,.15,1);background:conic-gradient(var(--a) 0 45deg,var(--b) 45deg 90deg,var(--c) 90deg 135deg,var(--d) 135deg 180deg,var(--a) 180deg 225deg,var(--b) 225deg 270deg,var(--c) 270deg 315deg,var(--d) 315deg 360deg)}
-.wheel:after{content:'⚔️';position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:64px;height:64px;background:#fff;border-radius:50%;display:grid;place-items:center;font-size:28px;box-shadow:0 2px 10px #0002}
-.label{position:absolute;left:50%;top:50%;width:90px;margin-left:-45px;margin-top:-9px;text-align:center;color:#fff;font-weight:900;font-size:12px;text-shadow:0 1px 3px #000}
-.l1{transform:rotate(22deg) translateY(-125px)}.l2{transform:rotate(67deg) translateY(-125px)}.l3{transform:rotate(112deg) translateY(-125px)}.l4{transform:rotate(157deg) translateY(-125px)}
-.pointer{position:absolute;z-index:2;top:-10px;left:50%;transform:translateX(-50%);font-size:34px}
-.result{text-align:center;font-size:20px;font-weight:900;padding:16px;background:var(--soft);border-radius:13px;margin-bottom:15px}
-.q{font-size:20px;font-weight:900;line-height:1.45;margin-bottom:16px}.answers{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.ans{border:0;color:#fff;padding:18px;border-radius:12px;font-weight:800;cursor:pointer;min-height:72px}.a{background:var(--a)}.b{background:var(--b)}.c{background:var(--c)}.d{background:var(--d)}
-@media(max-width:520px){.home,.players,.answers{grid-template-columns:1fr}.title{font-size:24px}.wheel-area{width:min(330px,90vw)}}
+*{box-sizing:border-box}
+body{
+  margin:0; min-height:100vh; display:flex; align-items:center; justify-content:center;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  background:#f7f7f7; color:#111;
+}
+.app{width:min(460px,94vw); text-align:center}
+.logo{display:block;color:#111;text-decoration:none;font-size:30px;font-weight:900;margin-bottom:18px}
+.card{
+  background:#fff; border:1px solid #e5e5e5;
+  border-radius:28px; padding:28px; box-shadow:0 20px 60px rgba(0,0,0,.10);
+}
+.bomb{
+  width:190px;height:190px;border-radius:50%;margin:8px auto 22px;
+  display:flex;align-items:center;justify-content:center;position:relative;
+  background:radial-gradient(circle at 35% 30%,#555,#171717 55%,#050505);
+  box-shadow:inset -12px -15px 25px #000,0 0 35px #f002;
+}
+.bomb:before{content:"";position:absolute;top:-16px;right:38px;width:30px;height:25px;background:#222;border-radius:8px}
+.bomb:after{content:"";position:absolute;top:-32px;right:51px;width:8px;height:25px;background:#ff8a00;border-radius:8px;box-shadow:0 0 14px #ff5a00}
+.status{font-size:18px;font-weight:700;margin:10px 0 24px}
+button{
+  width:100%;border:0;border-radius:16px;padding:16px;font-size:17px;font-weight:800;
+  cursor:pointer;background:#fff;color:#111;margin-top:10px;
+}
+button.primary{background:#ff3b30;color:white}
+button:disabled{opacity:.4;cursor:not-allowed}
+.row{display:flex;gap:10px}
+.row button{flex:1}
+input{
+  width:100%;padding:15px;border-radius:14px;border:1px solid #ddd;
+  background:#fff;color:#111;font-size:16px;outline:none;margin:6px 0;
+}
+.info{font-size:13px;color:#777;line-height:1.6;margin-top:18px}
+.hidden{display:none}
+.players{text-align:left;margin:15px 0;padding:0;list-style:none}
+.players li{padding:10px 12px;border-radius:12px;background:#f5f5f5;margin:5px 0}
+.small{font-size:13px;color:#aaa}
 </style>
 </head>
 <body>
-<div class="nav"><button class="brand" onclick="location.href='https://semicolonxss.github.io/Formwheel/'"><span>F</span>FormWheel <i class="tag">Wheel Battle</i></button><b id="navpin"></b></div>
-<div id="app"></div>
-<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-database-compat.js"></script>
-<script>
-const firebaseConfig={
- apiKey:'AIzaSyBreTSe1m0-xlbF4aupnU5isRZCihR25IE',
- authDomain:'formwheel.firebaseapp.com',
- databaseURL:'https://formwheel-default-rtdb.firebaseio.com/',
- projectId:'formwheel',storageBucket:'formwheel.firebasestorage.app',
- messagingSenderId:'431583088241',appId:'1:431583088241:web:74e0e34ea1e3e1170c55d0'
+<div class="app">
+  <a class="logo" href="https://semicolonxss.github.io/Formwheel/" aria-label="FormWheel 메인으로 이동">💣 FormWheel Bomb</a>
+
+  <div id="lobby" class="card">
+    <h2>폭탄 돌리기</h2>
+    <p class="small">방을 만들고 친구에게 방 코드를 알려주세요.</p>
+    <input id="name" maxlength="16" placeholder="닉네임">
+    <button class="primary" onclick="createRoom()">방 만들기</button>
+    <div class="row">
+      <input id="roomInput" maxlength="8" placeholder="방 코드">
+      <button onclick="joinRoom()">참가</button>
+    </div>
+    <div class="info">폭탄 제한시간은 매 판 랜덤으로<br><b>10~30초</b> 사이가 됩니다.</div>
+  </div>
+
+  <div id="game" class="card hidden">
+    <div class="room-code">방 코드: <b id="roomCode"></b></div>
+    <div class="bomb"></div>
+    <div class="status" id="status">게임 준비 중...</div>
+    <button id="startBtn" class="primary hidden" onclick="startGame()">게임 시작</button>
+    <button id="passBtn" class="primary" onclick="passBomb()">💣 폭탄 넘기기</button>
+    <ul id="players" class="players"></ul>
+    <div class="info">내 차례일 때만 폭탄을 넘길 수 있어요.<br>시간이 0이 되면 폭탄을 가진 플레이어가 탈락합니다.</div>
+  </div>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+import {
+  getDatabase, ref, get, set, update, onValue, runTransaction
+} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-database.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBreTSe1m0-xlbF4aupnU5isRZCihR25IE",
+  authDomain: "formwheel.firebaseapp.com",
+  databaseURL: "https://formwheel-default-rtdb.firebaseio.com",
+  projectId: "formwheel",
+  storageBucket: "formwheel.firebasestorage.app",
+  messagingSenderId: "431583088241",
+  appId: "1:431583088241:web:74e0e34ea1e3e1170c55d0",
+  measurementId: "G-T372YXDF8D"
 };
-firebase.initializeApp(firebaseConfig);const db=firebase.database();
-const qs=[
- {q:'대한민국의 수도는?',a:['부산','서울','인천','대구'],c:1},
- {q:'물의 화학식은?',a:['CO₂','O₂','H₂O','NaCl'],c:2},
- {q:'태양계에서 가장 큰 행성은?',a:['지구','목성','화성','토성'],c:1},
- {q:'1년은 평년 기준 며칠?',a:['364일','365일','366일','360일'],c:1},
- {q:'HTML은 무엇의 약자일까요?',a:['Hyper Text Markup Language','High Text Machine Language','Home Tool Markup Language','Hyperlink Text Main Language'],c:0},
- {q:'5×6은?',a:['25','30','35','40'],c:1}
-];
-// 룰렛은 8칸이지만 실제 종류는 4가지(+10, 퀴즈, +20, 스틸)가 반복됩니다.
-const outcomeLabels=['+10 점','🧠 퀴즈','+20 점','💥 스틸'];
-const STEAL_AMT=15;
-let pin='',id='',name='',host=false,rot=0,unsub=[];
-const app=document.getElementById('app');
-const esc=x=>String(x??'').replace(/[&<>"']/g,s=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[s]));
-const ref=()=>db.ref('wheelBattle/'+pin);
-function clean(){unsub.forEach(x=>x());unsub=[]}
-function view(x){clean();app.innerHTML=x}
-function home(){
- view(`<main class="wrap"><h1 class="title">🎡 Wheel Battle</h1><p class="sub">룰렛을 돌려서 공격하고, 점수를 뺏고, 마지막까지 살아남으세요!</p>
- <div class="home"><button onclick="create()"><b>⚔️ Battle 만들기</b><br><span class="small">방을 만들고 친구를 초대해요.</span></button>
- <button onclick="join()"><b>🚪 참가하기</b><br><span class="small">친구의 4자리 코드로 들어가요.</span></button></div></main>`);
-}
-function create(){
- view(`<main class="wrap"><div class="card"><h1 class="title">Battle 만들기</h1><label>닉네임</label><input id="name" maxlength="12" placeholder="닉네임을 입력하세요"><button class="btn" onclick="makeRoom()">방 만들기</button><div id="err" class="err"></div></div></main>`);
-}
-function makeRoom(){
- name=document.getElementById('name').value.trim();if(!name)return err('닉네임을 입력해주세요.');
- pin=String(Math.floor(1000+Math.random()*9000));id=Math.random().toString(36).slice(2);host=true;
- ref().set({status:'lobby',turn:id,round:0,players:{[id]:{name,score:0,joined:true}},createdAt:Date.now()}).then(lobby)
-}
-function join(){
- view(`<main class="wrap"><div class="card"><h1 class="title">참가하기</h1><label>닉네임</label><input id="name" maxlength="12" placeholder="닉네임을 입력하세요">
- <label>Battle 코드</label><input id="pin" inputmode="numeric" maxlength="4" placeholder="1234"><button class="btn" onclick="enter()">참가하기</button><div id="err" class="err"></div></div></main>`);
-}
-function enter(){
- name=document.getElementById('name').value.trim();pin=document.getElementById('pin').value.trim();
- if(!name||pin.length!==4)return err('닉네임과 4자리 코드를 확인해주세요.');
- id=Math.random().toString(36).slice(2);host=false;
- ref().once('value').then(s=>{if(!s.exists())throw Error('없는 방');return ref().child('players/'+id).set({name,score:0,joined:true})}).then(lobby).catch(()=>err('존재하지 않는 Battle입니다.'));
-}
-function err(x){const e=document.getElementById('err');if(e)e.textContent=x}
-function lobby(){
- view(`<main class="wrap"><div class="pin"><div>Battle 코드</div><strong>${pin}</strong><div class="small">친구에게 이 코드를 알려주세요.</div></div>
- <div class="card"><h2>플레이어</h2><div id="players" class="players"></div><div id="status" class="status">상대를 기다리는 중…</div>${host?'<button class="btn" id="start" disabled>게임 시작</button>':''}</div></main>`);
- document.getElementById('navpin').textContent=pin;
- // players 하위값만 구독하면 status 변경(게임 시작)을 아무도 감지하지 못해 화면이 멈춥니다.
- // 방 전체(root)를 구독해서 상태가 바뀌는 즉시 해당 화면으로 넘어가도록 합니다.
- const cb=s=>{
-  const g=s.val()||{};
-  if(g.status&&g.status!=='lobby'){
-   if(g.status==='spin')spinScreen(g);
-   else if(g.status==='question')questionScreen(g);
-   else if(g.status==='result')resultScreen(g);
-   else if(g.status==='final')finalScreen(g);
-   return;
+
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+
+let roomId = "";
+let myId = localStorage.getItem("bombPlayerId") || crypto.randomUUID();
+localStorage.setItem("bombPlayerId", myId);
+let lastState = null;
+let timerInterval = null;
+let unsubscribe = null;
+
+const $ = id => document.getElementById(id);
+
+function getName(){
+  const n = $("name").value.trim();
+  if(!n){
+    alert("닉네임을 입력해주세요.");
+    return null;
   }
-  const arr=Object.entries(g.players||{});
-  const playersEl=document.getElementById('players');
-  if(playersEl)playersEl.innerHTML=arr.map(([k,x])=>`<div class="player ${k===id?'me':''}">🎮<div><b>${esc(x.name)}</b></div><div class="score">${x.score||0}</div></div>`).join('');
-  const statusEl=document.getElementById('status');
-  if(statusEl)statusEl.textContent=arr.length<2?'상대를 기다리는 중…':'준비 완료!';
-  const startEl=document.getElementById('start');
-  if(host&&startEl&&arr.length>=2)startEl.disabled=false;
- };
- ref().on('value',cb);unsub.push(()=>ref().off('value',cb));
- if(host){const s=document.getElementById('start');if(s)s.onclick=start;}
+  return n;
 }
-function start(){ref().update({status:'spin',round:1,turn:id,result:null})}
-function watch(){
- const cb=s=>{const g=s.val();if(!g)return;
- if(g.status==='spin')spinScreen(g);else if(g.status==='question')questionScreen(g);
- else if(g.status==='result')resultScreen(g);else if(g.status==='final')finalScreen(g)};
- ref().on('value',cb);unsub.push(()=>ref().off('value',cb));
+
+function randomDuration(){
+  // 매 판 10~30초 사이로 랜덤 설정
+  return 10000 + Math.floor(Math.random() * 20001);
 }
-function spinScreen(g){
- const myTurn=g.turn===id;
- view(`<main class="wrap"><div class="card"><div class="players" id="score"></div><div class="status">Round ${g.round||1} · ${myTurn?'🎯 당신의 차례':'⏳ 상대의 차례'}</div>
- <div class="wheel-area"><div class="pointer">▼</div><div class="wheel" id="wheel"><span class="label l1">+10</span><span class="label l2">퀴즈</span><span class="label l3">+20</span><span class="label l4">스틸</span></div></div>
- <button class="btn" ${myTurn?'':'disabled'} onclick="spin()">🎡 룰렛 돌리기</button><p class="small" style="text-align:center">룰렛 결과에 따라 점수를 얻거나 상대 점수를 뺏을 수 있어요.</p></div></main>`);
- drawScores(g);watch();
+
+function makeRoomCode(){
+  return Math.random().toString(36).slice(2,8).toUpperCase();
 }
-function drawScores(g){
- const p=g.players||{},arr=Object.entries(p),el=document.getElementById('score');
- if(el)el.innerHTML=arr.map(([k,x])=>`<div class="player ${k===id?'me':''}">🎮 ${esc(x.name)}<div class="score">${x.score||0}</div></div>`).join('');
+
+function escapeHtml(str){
+  return String(str).replace(/[&<>"']/g, m => ({
+    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"
+  }[m]));
 }
-function spin(){
- const n=Math.floor(Math.random()*8);rot+=1440+(360/8)*(n+.5);
- const w=document.getElementById('wheel');if(w)w.style.transform=`rotate(${rot}deg)`;
- setTimeout(()=>resolveSpin(n),4100);
-}
-// 스핀 결과를 실제로 게임 상태에 반영합니다. (이전 버전은 +10/+20 칸에서 아무 처리도 하지 않아 화면이 멈췄습니다)
-function resolveSpin(n){
- const type=n%4; // 0:+10  1:퀴즈  2:+20  3:스틸
- if(type===1){
-  ref().update({status:'question',spinIndex:n,question:Math.floor(Math.random()*qs.length),turn:id});
-  return;
- }
- ref().once('value').then(s=>{
-  const g=s.val()||{},p=g.players||{};
-  if(!p[id])return;
-  if(type===0||type===2){
-   const amt=type===0?10:20;
-   p[id]={...p[id],score:(p[id].score||0)+amt};
-   ref().update({players:p,status:'result',spinIndex:n,result:amt,stole:false,turn:other(p),round:g.round||1});
-  }else{
-   const opp=other(p);
-   const amt=Math.min(STEAL_AMT,p[opp]?.score||0);
-   p[opp]={...p[opp],score:(p[opp].score||0)-amt};
-   p[id]={...p[id],score:(p[id].score||0)+amt};
-   ref().update({players:p,status:'result',spinIndex:n,result:amt,stole:true,turn:other(p),round:g.round||1});
+
+window.createRoom = async () => {
+  const name = getName();
+  if(!name) return;
+
+  try{
+    $("status") && ($("status").textContent = "방 만드는 중...");
+    let code = makeRoomCode();
+    let roomRef = ref(db, "bombRooms/" + code);
+    let snap = await get(roomRef);
+
+    while(snap.exists()){
+      code = makeRoomCode();
+      roomRef = ref(db, "bombRooms/" + code);
+      snap = await get(roomRef);
+    }
+
+    roomId = code;
+
+    const player = {
+      id: myId,
+      name: name,
+      alive: true
+    };
+
+    await set(roomRef, {
+      status: "waiting",
+      hostId: myId,
+      players: {
+        [myId]: player
+      },
+      bombHolder: myId,
+      startedAt: 0,
+      duration: randomDuration(),
+      winner: null,
+      createdAt: Date.now()
+    });
+
+    enterGame();
+    listenRoom();
+  }catch(e){
+    console.error(e);
+    alert("방 만들기에 실패했습니다.\nFirebase Realtime Database 규칙과 설정을 확인해주세요.");
   }
- });
+};
+
+window.joinRoom = async () => {
+  const name = getName();
+  if(!name) return;
+
+  const code = $("roomInput").value.trim().toUpperCase();
+  if(!code){
+    alert("방 코드를 입력해주세요.");
+    return;
+  }
+
+  try{
+    const roomRef = ref(db, "bombRooms/" + code);
+    const snap = await get(roomRef);
+
+    if(!snap.exists()){
+      alert("방을 찾을 수 없습니다.");
+      return;
+    }
+
+    const data = snap.val();
+
+    if(data.status !== "waiting"){
+      alert("이미 시작된 방입니다.");
+      return;
+    }
+
+    const players = data.players || {};
+    if(Object.keys(players).length >= 10){
+      alert("최대 10명까지 참가할 수 있습니다.");
+      return;
+    }
+
+    if(players[myId]){
+      alert("이미 참가한 방입니다.");
+      roomId = code;
+      enterGame();
+      listenRoom();
+      return;
+    }
+
+    await update(roomRef, {
+      ["players/" + myId]: {
+        id: myId,
+        name: name,
+        alive: true
+      }
+    });
+
+    roomId = code;
+    enterGame();
+    listenRoom();
+
+  }catch(e){
+    console.error(e);
+    alert("방 참가에 실패했습니다.\nFirebase Realtime Database 규칙과 설정을 확인해주세요.");
+  }
+};
+
+function enterGame(){
+  $("lobby").classList.add("hidden");
+  $("game").classList.remove("hidden");
+  $("roomCode").textContent = roomId;
 }
-function questionScreen(g){
- const q=qs[g.question%qs.length],myTurn=g.turn===id;
- view(`<main class="wrap"><div class="card"><div class="status">${myTurn?'🎯 당신이 룰렛을 돌렸어요!':'⏳ 상대가 룰렛을 돌렸어요!'}</div>
- <div class="result">🧠 퀴즈</div>
- <div class="q">${esc(q.q)}</div><div class="answers">${q.a.map((a,i)=>`<button class="ans ${['a','b','c','d'][i]}" onclick="answer(${i})" ${myTurn?'':'disabled'}>${esc(a)}</button>`).join('')}</div>
- </div></main>`);
- drawScores(g);watch();
+
+function listenRoom(){
+  if(unsubscribe) unsubscribe();
+
+  const roomRef = ref(db, "bombRooms/" + roomId);
+
+  unsubscribe = onValue(roomRef, snap => {
+    if(!snap.exists()){
+      alert("방이 삭제되었습니다.");
+      location.reload();
+      return;
+    }
+
+    lastState = normalizeState(snap.val());
+    render();
+  }, error => {
+    console.error(error);
+    alert("게임 데이터를 불러오지 못했습니다.");
+  });
 }
-function answer(i){
- ref().once('value').then(s=>{const g=s.val(),q=qs[g.question%qs.length],p=g.players||{};
- let delta=i===q.c?10:0;p[id].score=(p[id].score||0)+delta;
- ref().update({players:p,status:'result',result:delta,stole:false,answer:i,correct:q.c,turn:other(p),round:g.round||1});
- });
+
+function normalizeState(data){
+  const playersObject = data.players || {};
+  return {
+    ...data,
+    players: Object.values(playersObject)
+  };
 }
-function other(p){const ids=Object.keys(p);return ids.find(x=>x!==id)||id}
-function resultScreen(g){
- const delta=g.result||0;
- const msg=g.stole
-  ?(delta?`💥 상대에게서 ${delta}점을 뺏었어요!`:'상대에게 뺏을 점수가 없었어요.')
-  :(delta?`🎉 +${delta}점!`:'😢 아쉽다! 0점');
- view(`<main class="wrap"><div class="card"><div class="result">${msg}</div>
- <p class="status">다음 차례는 <b>${esc((g.players||{})[g.turn]?.name||'상대')}</b></p><button class="btn" onclick="nextRound()">다음 룰렛</button></div></main>`);
- drawScores(g);watch();
+
+function render(){
+  const s = lastState;
+  if(!s) return;
+
+  $("players").innerHTML = s.players.map(p =>
+    `<li>${p.id === s.bombHolder ? "💣 " : ""}${escapeHtml(p.name)}
+     ${p.id === myId ? "<b>(나)</b>" : ""}
+     ${!p.alive ? " 💀" : ""}</li>`
+  ).join("");
+
+  const mine = s.bombHolder === myId && s.status === "playing";
+  $("passBtn").disabled = !mine;
+
+  if(s.status === "waiting"){
+    clearInterval(timerInterval);
+
+    // The first player is the host.
+    const isHost = s.hostId === myId;
+
+    $("startBtn").classList.toggle("hidden", !isHost);
+    $("startBtn").disabled = s.players.length < 2;
+
+    $("status").textContent = s.players.length < 2
+      ? (isHost ? "친구를 기다리는 중..." : "호스트가 게임을 시작하기를 기다리는 중...")
+      : (isHost ? "준비 완료! 게임을 시작하세요." : "호스트가 게임을 시작하기를 기다리는 중...");
+
+    $("passBtn").disabled = true;
+    return;
+  }
+
+  if(s.status === "playing"){
+    $("startBtn").classList.add("hidden");
+    $("status").textContent = mine
+      ? "🔥 내 차례! 폭탄을 넘겨!"
+      : "상대방이 폭탄을 가지고 있어요.";
+    startTimer();
+    return;
+  }
+
+  if(s.status === "finished"){
+    $("startBtn").classList.add("hidden");
+    $("status").textContent = s.winner
+      ? `🏆 ${escapeHtml(s.winner)} 승리!`
+      : "게임 종료";
+    $("passBtn").disabled = true;
+    clearInterval(timerInterval);
+  }
 }
-function nextRound(){
- ref().once('value').then(s=>{const g=s.val();if((g.round||1)>=10)return ref().update({status:'final'});
- ref().update({status:'spin',round:(g.round||1)+1})});
+
+function startTimer(){
+  clearInterval(timerInterval);
+
+  const updateTimer = async () => {
+    if(!lastState || lastState.status !== "playing") return;
+
+    const left = Math.max(
+      0,
+      Number(lastState.startedAt) + Number(lastState.duration) - Date.now()
+    );
+
+    if(left <= 0){
+      clearInterval(timerInterval);
+      await explode();
+    }
+  };
+
+  updateTimer();
+  timerInterval = setInterval(updateTimer, 200);
 }
-function finalScreen(g){
- const arr=Object.values(g.players||{}).sort((a,b)=>(b.score||0)-(a.score||0));
- view(`<main class="wrap"><div class="card" style="text-align:center"><div style="font-size:55px">🏆</div><h1>Battle 종료!</h1>
- <h2>우승: ${esc(arr[0]?.name||'')}</h2>${arr.map((x,i)=>`<p>${i+1}위　<b>${esc(x.name)}</b>　${x.score||0}점</p>`).join('')}
- <button class="btn" onclick="location.reload()">다시 하기</button></div></main>`);
+
+window.startGame = async () => {
+  if(!roomId || !lastState) return;
+
+  const players = lastState.players.filter(p => p.alive);
+
+  if(lastState.hostId !== myId){
+    alert("호스트만 게임을 시작할 수 있습니다.");
+    return;
+  }
+
+  if(players.length < 2){
+    alert("최소 2명이 참가해야 게임을 시작할 수 있습니다.");
+    return;
+  }
+
+  try{
+    const roomRef = ref(db, "bombRooms/" + roomId);
+
+    // 현재 대기 상태인지 한 번 더 확인한 뒤 시작합니다.
+    const snap = await get(roomRef);
+    if(!snap.exists()) return;
+
+    const current = snap.val();
+    if(current.status !== "waiting") return;
+
+    const currentPlayers = Object.values(current.players || {})
+      .filter(p => p.alive);
+
+    if(currentPlayers.length < 2){
+      alert("최소 2명이 참가해야 게임을 시작할 수 있습니다.");
+      return;
+    }
+
+    if(current.hostId !== myId){
+      alert("호스트만 게임을 시작할 수 있습니다.");
+      return;
+    }
+
+    await update(roomRef, {
+      status: "playing",
+      startedAt: Date.now(),
+      bombHolder: currentPlayers[0].id
+    });
+
+  }catch(e){
+    console.error(e);
+    alert("게임 시작에 실패했습니다.\nFirebase Realtime Database 규칙을 확인해주세요.");
+  }
+};
+
+window.passBomb = async () => {
+  if(!roomId) return;
+
+  try{
+    const roomRef = ref(db, "bombRooms/" + roomId);
+
+    await runTransaction(roomRef, current => {
+      if(!current) return current;
+
+      if(current.status !== "playing") return;
+      if(current.bombHolder !== myId) return;
+
+      const players = Object.values(current.players || {})
+        .filter(p => p.alive);
+
+      if(players.length <= 1) return current;
+
+      const index = players.findIndex(p => p.id === myId);
+      const next = players[(index + 1) % players.length];
+
+      current.bombHolder = next.id;
+      current.startedAt = Date.now();
+
+      return current;
+    });
+  }catch(e){
+    console.error(e);
+  }
+};
+
+async function explode(){
+  if(!roomId || !lastState || lastState.status !== "playing") return;
+
+  try{
+    const roomRef = ref(db, "bombRooms/" + roomId);
+
+    await runTransaction(roomRef, current => {
+      if(!current || current.status !== "playing") return current;
+
+      const holder = current.bombHolder;
+      const players = current.players || {};
+
+      if(!players[holder]) return current;
+
+      players[holder].alive = false;
+
+      const alive = Object.values(players).filter(p => p.alive);
+
+      if(alive.length <= 1){
+        current.status = "finished";
+        current.winner = alive.length === 1 ? alive[0].name : null;
+        current.bombHolder = null;
+        current.startedAt = 0;
+      }else{
+        const next = alive[Math.floor(Math.random() * alive.length)];
+        current.status = "playing";
+        current.bombHolder = next.id;
+        current.startedAt = Date.now();
+      }
+
+      current.players = players;
+      return current;
+    });
+  }catch(e){
+    console.error(e);
+  }
 }
-home();
+
 </script>
 </body>
 </html>
