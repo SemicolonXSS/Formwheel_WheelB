@@ -91,12 +91,27 @@ function lobby(){
  view(`<main class="wrap"><div class="pin"><div>Battle 코드</div><strong>${pin}</strong><div class="small">친구에게 이 코드를 알려주세요.</div></div>
  <div class="card"><h2>플레이어</h2><div id="players" class="players"></div><div id="status" class="status">상대를 기다리는 중…</div>${host?'<button class="btn" id="start" disabled>게임 시작</button>':''}</div></main>`);
  document.getElementById('navpin').textContent=pin;
- const p=ref().child('players');
- const cb=s=>{const v=s.val()||{},arr=Object.entries(v);
- document.getElementById('players').innerHTML=arr.map(([k,x])=>`<div class="player ${k===id?'me':''}">🎮<div><b>${esc(x.name)}</b></div><div class="score">${x.score||0}</div></div>`).join('');
- document.getElementById('status').textContent=arr.length<2?'상대를 기다리는 중…':'준비 완료!';
- if(host&&arr.length>=2)document.getElementById('start').disabled=false};
- p.on('value',cb);unsub.push(()=>p.off('value',cb));if(host)document.getElementById('start').onclick=start;
+ // players 하위값만 구독하면 status 변경(게임 시작)을 아무도 감지하지 못해 화면이 멈춥니다.
+ // 방 전체(root)를 구독해서 상태가 바뀌는 즉시 해당 화면으로 넘어가도록 합니다.
+ const cb=s=>{
+  const g=s.val()||{};
+  if(g.status&&g.status!=='lobby'){
+   if(g.status==='spin')spinScreen(g);
+   else if(g.status==='question')questionScreen(g);
+   else if(g.status==='result')resultScreen(g);
+   else if(g.status==='final')finalScreen(g);
+   return;
+  }
+  const arr=Object.entries(g.players||{});
+  const playersEl=document.getElementById('players');
+  if(playersEl)playersEl.innerHTML=arr.map(([k,x])=>`<div class="player ${k===id?'me':''}">🎮<div><b>${esc(x.name)}</b></div><div class="score">${x.score||0}</div></div>`).join('');
+  const statusEl=document.getElementById('status');
+  if(statusEl)statusEl.textContent=arr.length<2?'상대를 기다리는 중…':'준비 완료!';
+  const startEl=document.getElementById('start');
+  if(host&&startEl&&arr.length>=2)startEl.disabled=false;
+ };
+ ref().on('value',cb);unsub.push(()=>ref().off('value',cb));
+ if(host){const s=document.getElementById('start');if(s)s.onclick=start;}
 }
 function start(){ref().update({status:'spin',round:1,turn:id,result:null})}
 function watch(){
